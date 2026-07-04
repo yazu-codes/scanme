@@ -74,6 +74,8 @@ func main() {
 		dsn = "app.db"
 	}
 
+	fmt.Println("DSN:", dsn)
+
 	db := database.Connect(dsn)
 
 	fmt.Println("Auto-migrating database schema...")
