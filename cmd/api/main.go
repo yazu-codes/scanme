@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -18,6 +19,14 @@ import (
 )
 
 func main() {
+	config := os.Getenv("CONFIG_YAML")
+	if config != "" {
+		err := os.WriteFile("config.yaml", []byte(config), 0600)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath("./cmd/api/configs") // current directory
