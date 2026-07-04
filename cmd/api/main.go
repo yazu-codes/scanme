@@ -21,10 +21,13 @@ import (
 func main() {
 	config := os.Getenv("CONFIG_YAML")
 	if config != "" {
+		fmt.Println("CONFIG_YAML environment variable is set. Writing to config.yaml.")
 		err := os.WriteFile("config.yaml", []byte(config), 0600)
 		if err != nil {
 			log.Fatal(err)
 		}
+	} else {
+		fmt.Println("CONFIG_YAML environment variable is not set. Using existing config.yaml.")
 	}
 
 	viper.SetConfigName("config")
