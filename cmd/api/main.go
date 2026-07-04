@@ -76,6 +76,7 @@ func main() {
 
 	db := database.Connect(dsn)
 
+	fmt.Println("Auto-migrating database schema...")
 	if err := db.AutoMigrate(
 		// &models.User{},
 		// &models.Post{},
