@@ -22,7 +22,7 @@ func (m *MenuRepository) GetAllMenus() ([]model.Menu, error) {
 
 func (m *MenuRepository) GetMenuByID(id uint) (*model.Menu, error) {
 	var menu model.Menu
-	if err := m.DB.First(&menu, id).Error; err != nil {
+	if err := m.DB.Preload("MenuItems").Preload("MenuOwner").Preload("MenuConfiguration").First(&menu, id).Error; err != nil {
 		return nil, err
 	}
 	return &menu, nil
