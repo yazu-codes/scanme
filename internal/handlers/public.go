@@ -183,6 +183,15 @@ func (h *PublicHandler) AddMenuOwner(c *gin.Context) {
 	c.JSON(http.StatusCreated, owner)
 }
 
+func (h *PublicHandler) GetAllCodes(c *gin.Context) {
+	codes, err := h.codeService.GetAllCodes()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"codes": codes})
+}
+
 func (h *PublicHandler) Home(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Welcome!",

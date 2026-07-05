@@ -9,6 +9,16 @@ type CardMenuCodeRepository struct {
 	DB *gorm.DB
 }
 
+// GetAllCodes retrieves all CardMenuCode records from the database.
+func (c *CardMenuCodeRepository) GetAllCodes() ([]model.CardMenuCode, error) {
+	var cardMenuCodes []model.CardMenuCode
+	err := c.DB.Find(&cardMenuCodes).Error
+	if err != nil {
+		return nil, err
+	}
+	return cardMenuCodes, nil
+}
+
 func (c *CardMenuCodeRepository) GetCardMenuCodeByMenuId(menuId int64) (*model.CardMenuCode, error) {
 	var cardMenuCode model.CardMenuCode
 	err := c.DB.Where("menu_id = ?", menuId).First(&cardMenuCode).Error

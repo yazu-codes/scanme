@@ -104,6 +104,7 @@ func main() {
 	// Public routes
 	api.GET("/", publicHandler.Home)
 	api.GET("/menus", publicHandler.GetMenus)
+	api.GET("/codes", publicHandler.GetAllCodes)
 	api.POST("/login", publicHandler.Login)
 	api.POST("/create-menu", publicHandler.CreateMenu)
 	api.POST("/create-code", publicHandler.CreateCardMenuCode)
