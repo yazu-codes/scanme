@@ -85,6 +85,20 @@ func (h *PublicHandler) DeleteMenuById(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Menu deleted successfully"})
 }
 
+func (h *PublicHandler) UpdateCardMenuCode(c *gin.Context) {
+	var cardMenuCode model.CardMenuCode
+	if err := c.ShouldBindJSON(&cardMenuCode); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	updatedCardMenuCode, err := h.codeService.UpdateCardMenuCode(&cardMenuCode)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, updatedCardMenuCode)
+}
+
 func (h *PublicHandler) SuspendMenuById(c *gin.Context) {
 	id := c.Param("id")
 	idtouint, err := strconv.ParseInt(id, 10, 64)
