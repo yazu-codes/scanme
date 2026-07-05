@@ -28,7 +28,7 @@ func (s *MenuService) GetMenuNameById(id uint) (string, error) {
 		return "", err
 	}
 	fmt.Println("Found menu:", menu)
-	return menu.MenuOwner.Name, nil
+	return menu.MenuOwner.UrlName, nil
 }
 
 func (s *MenuService) AddMenuConfiguration(configuration *model.MenuConfiguration) (*model.MenuConfiguration, error) {
