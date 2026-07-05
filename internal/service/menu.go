@@ -27,6 +27,7 @@ func (s *MenuService) GetMenuNameById(id uint) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	fmt.Println("Found menu:", menu)
 	return menu.MenuOwner.Name, nil
 }
 
