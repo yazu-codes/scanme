@@ -19,6 +19,14 @@ func NewCardMenuCodeService(db *gorm.DB) *CardMenuCodeService {
 	}
 }
 
+func (s *CardMenuCodeService) GetMenuIdByCode(code string) (int64, error) {
+	cardMenuCode, err := s.CardMenuCodeRepository.GetCardMenuCodeByCode(code)
+	if err != nil {
+		return 0, err
+	}
+	return cardMenuCode.MenuID, nil
+}
+
 func (s *CardMenuCodeService) GetCardMenuCodeByMenuId(menuId int64) (*model.CardMenuCode, error) {
 	cardMenuCode, err := s.CardMenuCodeRepository.GetCardMenuCodeByMenuId(menuId)
 	if err != nil {

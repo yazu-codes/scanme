@@ -25,6 +25,16 @@ func (c *CardMenuCodeRepository) CreateCardMenuCode(cardMenuCode *model.CardMenu
 	return cardMenuCode, nil
 }
 
+// GetCardMenuCodeByCode retrieves a CardMenuCode by its code.
+func (c *CardMenuCodeRepository) GetCardMenuCodeByCode(code string) (*model.CardMenuCode, error) {
+	var cardMenuCode model.CardMenuCode
+	err := c.DB.Where("code = ?", code).First(&cardMenuCode).Error
+	if err != nil {
+		return nil, err
+	}
+	return &cardMenuCode, nil
+}
+
 func (c *CardMenuCodeRepository) UpdateCardMenuCode(cardMenuCode *model.CardMenuCode) (*model.CardMenuCode, error) {
 	if err := c.DB.Save(cardMenuCode).Error; err != nil {
 		return nil, err

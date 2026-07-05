@@ -47,7 +47,7 @@ func (h *PublicHandler) GetMenuNameByCode(c *gin.Context) {
 		return
 	}
 
-	menuName, err := h.service.GetMenuNameById(menuId)
+	menuName, err := h.service.GetMenuNameById(uint(menuId))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
