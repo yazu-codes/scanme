@@ -29,9 +29,9 @@ func (h *PublicHandler) GetMenus(c *gin.Context) {
 }
 
 func (h *PublicHandler) GetMenuByName(c *gin.Context) {
-	code := c.Param("code")
+	name := c.Param("name")
 
-	menu, err := h.service.GetMenuByUrlName(code)
+	menu, err := h.service.GetMenuByUrlName(name)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
