@@ -1,6 +1,8 @@
 package service
 
 import (
+	"fmt"
+
 	"github.com/yazu-codes/scanme.git/internal/dto"
 	"github.com/yazu-codes/scanme.git/internal/model"
 	"github.com/yazu-codes/scanme.git/internal/repository"
@@ -20,6 +22,7 @@ func (s *MenuService) AddMenuOwner(owner *model.MenuOwner) (*model.MenuOwner, er
 }
 
 func (s *MenuService) GetMenuNameById(id uint) (string, error) {
+	fmt.Println("Getting menu name by ID:", id)
 	menu, err := s.MenuRepository.GetMenuByID(id)
 	if err != nil {
 		return "", err

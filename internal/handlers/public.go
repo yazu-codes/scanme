@@ -40,6 +40,7 @@ func (h *PublicHandler) GetMenuByName(c *gin.Context) {
 }
 
 func (h *PublicHandler) GetMenuNameByCode(c *gin.Context) {
+	fmt.Println("GetMenuNameByCode called")
 	code := c.Param("code")
 	menuId, err := h.codeService.GetMenuIdByCode(code)
 	if err != nil {

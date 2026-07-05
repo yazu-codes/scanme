@@ -1,6 +1,8 @@
 package service
 
 import (
+	"fmt"
+
 	"github.com/google/uuid"
 	"github.com/yazu-codes/scanme.git/internal/model"
 	"github.com/yazu-codes/scanme.git/internal/repository"
@@ -32,6 +34,7 @@ func (s *CardMenuCodeService) GetMenuIdByCode(code string) (int64, error) {
 }
 
 func (s *CardMenuCodeService) GetCardMenuCodeByMenuId(menuId int64) (*model.CardMenuCode, error) {
+	fmt.Println("Getting CardMenuCode for menuId:", menuId)
 	cardMenuCode, err := s.CardMenuCodeRepository.GetCardMenuCodeByMenuId(menuId)
 	if err != nil {
 		return nil, err
