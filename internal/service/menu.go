@@ -19,6 +19,14 @@ func (s *MenuService) AddMenuOwner(owner *model.MenuOwner) (*model.MenuOwner, er
 	return nil, nil
 }
 
+func (s *MenuService) GetMenuNameById(id uint) (string, error) {
+	menu, err := s.MenuRepository.GetMenuById(id)
+	if err != nil {
+		return "", err
+	}
+	return menu.Name, nil
+}
+
 func (s *MenuService) AddMenuConfiguration(configuration *model.MenuConfiguration) (*model.MenuConfiguration, error) {
 	return nil, nil
 }

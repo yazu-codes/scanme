@@ -96,6 +96,7 @@ func main() {
 	publicHandler := handlers.NewPublicHandler(menuService, cardMenuCodeService)
 
 	router.GET("/:name", publicHandler.GetMenuByName)
+	router.GET("/c/:code", publicHandler.GetMenuNameByCode)
 
 	// Protected routes
 	api := router.Group("/api")

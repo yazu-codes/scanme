@@ -39,6 +39,22 @@ func (h *PublicHandler) GetMenuByName(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"menu": menu})
 }
 
+func (h *PublicHandler) GetMenuNameByCode(c *gin.Context) {
+	code := c.Param("code")
+	menuId, err := h.codeService.GetMenuIdByCode(code)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	menuName, err := h.service.GetMenuNameById(menuId)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"menuName": menuName})
+}
+
 func (h *PublicHandler) UpdateMenu(c *gin.Context) {
 	var menu model.Menu
 	if err := c.ShouldBindJSON(&menu); err != nil {
