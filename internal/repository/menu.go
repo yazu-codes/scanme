@@ -151,7 +151,7 @@ func (m *MenuRepository) UpdateMenu(menu *model.Menu) error {
 	var keepIDs []uint
 	for _, item := range menu.MenuItems {
 		if item.ID != 0 {
-			keepIDs = append(keepIDs, item.ID)
+			keepIDs = append(keepIDs, uint(item.ID))
 		}
 	}
 
