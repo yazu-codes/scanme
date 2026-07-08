@@ -146,6 +146,26 @@ func (m *MenuRepository) UpdateMenu(menu *model.Menu) error {
 		return err
 	}
 
+	// Collect the IDs of items the client wants to keep (existing items being
+	// updated). Anything with id == 0 is a brand-new item and has no id yet.
+	var keepIDs []uint
+	for _, item := range menu.MenuItems {
+		if item.ID != 0 {
+			keepIDs = append(keepIDs, item.ID)
+		}
+	}
+
+	// Remove anything that belongs to this menu but wasn't in the submitted
+	// list — this is what makes "delete" from the dashboard actually stick.
+	deleteQuery := tx.Where("menu_id = ?", menu.ID)
+	if len(keepIDs) > 0 {
+		deleteQuery = deleteQuery.Where("id NOT IN ?", keepIDs)
+	}
+	if err := deleteQuery.Delete(&model.MenuItem{}).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
 	for _, item := range menu.MenuItems {
 		item.MenuID = menu.ID
 		if item.ID == 0 {
