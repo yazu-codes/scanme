@@ -38,6 +38,7 @@ type MenuConfiguration struct {
 	FontFamily      string `json:"font_family"`
 	FontSize        int    `json:"font_size"`
 	MenuID          int64  `json:"menu_id" gorm:"column:menu_id"`
+	CategoryOrder   string `json:"category_order" gorm:"column:category_order"`
 }
 
 type CardMenuCode struct {

@@ -18,7 +18,11 @@ type MenuService struct {
 
 func (s *MenuService) AddMenuOwner(owner *model.MenuOwner) (*model.MenuOwner, error) {
 	// s.MenuRepository.AddMenuOwner(owner)
-	return nil, nil
+	mo, err := s.MenuOwnerRepository.CreateMenuOwner(owner)
+	if err != nil {
+		return nil, err
+	}
+	return mo, nil
 }
 
 func (s *MenuService) GetMenuNameById(id uint) (string, error) {

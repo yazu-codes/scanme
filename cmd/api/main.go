@@ -109,6 +109,7 @@ func main() {
 	api.POST("/create-menu", publicHandler.CreateMenu)
 	api.POST("/create-code", publicHandler.CreateCardMenuCode)
 	api.PUT("/update-code", publicHandler.UpdateCardMenuCode)
+	api.POST("/create-owner", publicHandler.AddMenuOwner)
 	api.PUT("/update-menu", publicHandler.UpdateMenu)
 	api.POST("/suspend-menu/:id", publicHandler.SuspendMenuById)
 	api.POST("/enable-menu/:id", publicHandler.EnableMenuById)
