@@ -16,6 +16,7 @@ type PublicMenuOwner struct {
 }
 
 type PublicMenuConfiguration struct {
+	CategoryOrder   string `json:"category_order"`
 	BackgroundColor string `json:"background_color"`
 	FontColor       string `json:"font_color"`
 	FontFamily      string `json:"font_family"`

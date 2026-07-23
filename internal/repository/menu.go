@@ -76,6 +76,7 @@ func (m *MenuRepository) GetMenuByUrlName(urlName string) (*dto.PublicMenu, erro
 			PlaceBackgroundURL: menu.MenuOwner.PlaceBackgroundURL,
 		},
 		MenuConfiguration: dto.PublicMenuConfiguration{
+			CategoryOrder:   menu.MenuConfiguration.CategoryOrder,
 			BackgroundColor: menu.MenuConfiguration.BackgroundColor,
 			FontColor:       menu.MenuConfiguration.FontColor,
 			FontFamily:      menu.MenuConfiguration.FontFamily,
