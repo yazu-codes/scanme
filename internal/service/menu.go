@@ -117,3 +117,11 @@ func (s *MenuService) SuspendMenu(id uint) error {
 func (s *MenuService) EnableMenu(id uint) error {
 	return s.MenuRepository.EnableMenu(id)
 }
+
+func (s *MenuService) YummEnable(id uint) error {
+	return s.MenuRepository.SuspendMenu(id)
+}
+
+func (s *MenuService) YummDisable(id uint) error {
+	return s.MenuRepository.EnableMenu(id)
+}

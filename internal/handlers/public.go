@@ -141,6 +141,38 @@ func (h *PublicHandler) EnableMenuById(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Menu enabled successfully"})
 }
 
+func (h *PublicHandler) DisableYummById(c *gin.Context) {
+	id := c.Param("id")
+	idtouint, err := strconv.ParseInt(id, 10, 64)
+	properid := uint(idtouint)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid menu ID"})
+		return
+	}
+	err = h.service.YummDisable(properid)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Menu suspended successfully"})
+}
+
+func (h *PublicHandler) EnableYummById(c *gin.Context) {
+	id := c.Param("id")
+	idtouint, err := strconv.ParseInt(id, 10, 64)
+	properid := uint(idtouint)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid menu ID"})
+		return
+	}
+	err = h.service.YummEnable(properid)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Menu enabled successfully"})
+}
+
 func (h *PublicHandler) CreateMenu(c *gin.Context) {
 	fmt.Println("AA")
 	var menu model.Menu

@@ -113,6 +113,8 @@ func main() {
 	api.POST("/create-owner", publicHandler.AddMenuOwner)
 	api.PUT("/update-menu", publicHandler.UpdateMenu)
 	api.POST("/suspend-menu/:id", publicHandler.SuspendMenuById)
+	api.POST("/yumm-enable/:id", publicHandler.EnableYummById)
+	api.POST("/yumm-disable/:id", publicHandler.DisableYummById)
 	api.POST("/enable-menu/:id", publicHandler.EnableMenuById)
 	api.DELETE("/delete-menu/:id", publicHandler.DeleteMenuById)
 

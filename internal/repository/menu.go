@@ -209,3 +209,17 @@ func (m *MenuRepository) EnableMenu(id uint) error {
 	}
 	return nil
 }
+
+func (m *MenuRepository) YummDisable(id uint) error {
+	if err := m.DB.Model(&model.Menu{}).Where("id = ?", id).Update("yumm_eligible", false).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m *MenuRepository) YummEnable(id uint) error {
+	if err := m.DB.Model(&model.Menu{}).Where("id = ?", id).Update("yumm_eligible", true).Error; err != nil {
+		return err
+	}
+	return nil
+}
