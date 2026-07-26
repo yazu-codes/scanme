@@ -1,6 +1,6 @@
 package dto
 
-// Public-facing shapes — no DB identifiers exposed
+// Public-facing shapes, no DB identifiers exposed
 type PublicMenu struct {
 	MenuOwner         PublicMenuOwner         `json:"menu_owner"`
 	MenuConfiguration PublicMenuConfiguration `json:"menu_configuration"`
@@ -13,6 +13,7 @@ type PublicMenuOwner struct {
 	LogoURL            string `json:"menu_owner_logo_url"`
 	Slogan             string `json:"menu_owner_slogan"`
 	PlaceBackgroundURL string `json:"menu_owner_place_background_url"`
+	UrlName            string `json:"menu_owner_url_name"`
 }
 
 type PublicMenuConfiguration struct {

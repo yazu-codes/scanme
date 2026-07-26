@@ -9,6 +9,14 @@ type MenuOwnerRepository struct {
 	DB *gorm.DB
 }
 
+func (m *MenuOwnerRepository) AllEligibleForYumm() (model.MenuOwners, error) {
+	var menuOwners []model.MenuOwner
+	if err := m.DB.Where("yumm_eligible = true").Find(&menuOwners).Error; err != nil {
+		return []model.MenuOwner{}, err
+	}
+	return menuOwners, nil
+}
+
 func (m *MenuOwnerRepository) GetMenuOwnerByMenuId(id uint) (model.MenuOwner, error) {
 	var menuOwner model.MenuOwner
 	if err := m.DB.First("menu_id = ?", id).Find(&menuOwner).Error; err != nil {

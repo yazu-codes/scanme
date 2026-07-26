@@ -95,6 +95,7 @@ func main() {
 	cardMenuCodeService := service.NewCardMenuCodeService(db)
 	publicHandler := handlers.NewPublicHandler(menuService, cardMenuCodeService)
 
+	router.GET("/yumm", publicHandler.GetYummBrief)
 	router.GET("/:name", publicHandler.GetMenuByName)
 	router.GET("/c/:code", publicHandler.GetMenuNameByCode)
 

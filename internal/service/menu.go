@@ -52,6 +52,15 @@ func NewMenuService(db *gorm.DB) *MenuService {
 	}
 }
 
+func (s *MenuService) GetAllEligibleForYumm() ([]dto.PublicMenuOwner, error) {
+	yummMenus, err := s.MenuOwnerRepository.AllEligibleForYumm()
+	if err != nil {
+		return nil, err
+	}
+
+	return yummMenus.ToDTO(), nil
+}
+
 func (s *MenuService) GetAllMenus() ([]model.Menu, error) {
 	return s.MenuRepository.GetAllMenus()
 }

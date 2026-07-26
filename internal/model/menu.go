@@ -1,5 +1,7 @@
 package model
 
+import "github.com/yazu-codes/scanme.git/internal/dto"
+
 type Menu struct {
 	ID                int64             `json:"id" gorm:"primaryKey"`
 	MenuItems         []MenuItem        `json:"menu_items" gorm:"constraint:OnDelete:CASCADE;foreignKey:menu_id"`
@@ -29,6 +31,26 @@ type MenuOwner struct {
 	PlaceBackgroundURL string `json:"menu_owner_place_background_url" gorm:"column:menu_owner_place_background_url"`
 	Slogan             string `json:"menu_owner_slogan" gorm:"column:menu_owner_slogan"`
 	MenuID             int64  `json:"menu_id" gorm:"column:menu_id"`
+	YummEligible       bool   `json:"yumm_eligible" gorm:"column:yumm_eligible"`
+}
+
+type MenuOwners []MenuOwner
+
+func (m *MenuOwners) ToDTO() []dto.PublicMenuOwner {
+	result := make([]dto.PublicMenuOwner, 0, len(*m))
+
+	for _, owner := range *m {
+		result = append(result, dto.PublicMenuOwner{
+			Name:               owner.Name,
+			Phone:              owner.Phone,
+			LogoURL:            owner.LogoURL,
+			Slogan:             owner.Slogan,
+			PlaceBackgroundURL: owner.PlaceBackgroundURL,
+			UrlName:            owner.UrlName,
+		})
+	}
+
+	return result
 }
 
 type MenuConfiguration struct {

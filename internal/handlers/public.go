@@ -19,6 +19,15 @@ func NewPublicHandler(service *service.MenuService, codeService *service.CardMen
 	return &PublicHandler{service: service, codeService: codeService}
 }
 
+func (h *PublicHandler) GetYummBrief(c *gin.Context) {
+	places, err := h.service.GetAllEligibleForYumm()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	}
+
+	c.JSON(http.StatusOK, gin.H{"owners": places})
+}
+
 func (h *PublicHandler) GetMenus(c *gin.Context) {
 	menus, err := h.service.GetAllMenus()
 	if err != nil {
