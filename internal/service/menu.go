@@ -53,12 +53,12 @@ func NewMenuService(db *gorm.DB) *MenuService {
 }
 
 func (s *MenuService) GetAllEligibleForYumm() ([]dto.PublicMenuOwner, error) {
-	yummMenus, err := s.MenuOwnerRepository.AllEligibleForYumm()
+	yummMenus, err := s.MenuRepository.AllEligibleForYumm()
 	if err != nil {
 		return nil, err
 	}
 
-	return yummMenus.ToDTO(), nil
+	return yummMenus.ExtractPlaceInformation(), nil
 }
 
 func (s *MenuService) GetAllMenus() ([]model.Menu, error) {
@@ -119,9 +119,9 @@ func (s *MenuService) EnableMenu(id uint) error {
 }
 
 func (s *MenuService) YummEnable(id uint) error {
-	return s.MenuRepository.SuspendMenu(id)
+	return s.MenuRepository.YummEnable(id)
 }
 
 func (s *MenuService) YummDisable(id uint) error {
-	return s.MenuRepository.EnableMenu(id)
+	return s.MenuRepository.YummDisable(id)
 }

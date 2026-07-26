@@ -2,6 +2,18 @@ package model
 
 import "github.com/yazu-codes/scanme.git/internal/dto"
 
+type Menus []Menu
+
+func (m *Menus) ExtractPlaceInformation() []dto.PublicMenuOwner {
+	owners := make(MenuOwners, 0, len(*m))
+
+	for _, menu := range *m {
+		owners = append(owners, menu.MenuOwner)
+	}
+
+	return owners.ToDTO()
+}
+
 type Menu struct {
 	ID                int64             `json:"id" gorm:"primaryKey"`
 	MenuItems         []MenuItem        `json:"menu_items" gorm:"constraint:OnDelete:CASCADE;foreignKey:menu_id"`

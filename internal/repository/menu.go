@@ -12,6 +12,14 @@ type MenuRepository struct {
 	DB *gorm.DB
 }
 
+func (m *MenuRepository) AllEligibleForYumm() (model.Menus, error) {
+	var menus []model.Menu
+	if err := m.DB.Where("yumm_eligible = true").Preload("MenuOwner").Find(&menus).Error; err != nil {
+		return []model.Menu{}, err
+	}
+	return menus, nil
+}
+
 func (m *MenuRepository) GetAllMenus() ([]model.Menu, error) {
 	var menus []model.Menu
 	if err := m.DB.Preload("MenuItems").Preload("MenuOwner").Preload("MenuConfiguration").Find(&menus).Error; err != nil {
