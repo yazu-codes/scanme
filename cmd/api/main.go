@@ -49,6 +49,8 @@ func main() {
 	sslmode := viper.GetString("database.sslmode")
 	timezone := viper.GetString("database.timezone")
 
+	jwtSecret := viper.GetString("jwt_secret")
+
 	// -----------------------
 	// Build DSN
 	// -----------------------
@@ -111,14 +113,14 @@ func main() {
 	api.POST("/create-code", publicHandler.CreateCardMenuCode)
 	api.PUT("/update-code", publicHandler.UpdateCardMenuCode)
 	api.POST("/create-owner", publicHandler.AddMenuOwner)
-	api.PUT("/update-menu", publicHandler.UpdateMenu)
+	api.PUT("/update-menu", middleware.WithTimeout(2*time.Minute), publicHandler.UpdateMenu)
 	api.POST("/suspend-menu/:id", publicHandler.SuspendMenuById)
 	api.POST("/yumm-enable/:id", publicHandler.EnableYummById)
 	api.POST("/yumm-disable/:id", publicHandler.DisableYummById)
 	api.POST("/enable-menu/:id", publicHandler.EnableMenuById)
 	api.DELETE("/delete-menu/:id", publicHandler.DeleteMenuById)
 
-	api.Use(middleware.AuthMiddleware())
+	api.Use(middleware.AuthMiddleware(jwtSecret), middleware.RequireRole("admin"))
 	{
 		api.GET("/profile", handlers.Profile)
 		api.GET("/settings", handlers.Settings)

@@ -1,26 +1,78 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 )
 
-func AuthMiddleware() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		token := c.GetHeader("Authorization")
+// CustomClaims defines the JWT claims structure
+type CustomClaims struct {
+	UserID   string `json:"user_id"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	jwt.RegisteredClaims
+}
 
-		// Very basic authentication
-		if token != "Bearer my-secret-token" {
+// AuthMiddleware validates JWT tokens from the Authorization header
+func AuthMiddleware(secretKey string) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// Extract token from Authorization header
+		authHeader := c.GetHeader("Authorization")
+		if authHeader == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{
-				"error": "unauthorized",
+				"error": "authorization header is missing",
 			})
 			c.Abort()
 			return
 		}
 
-		// Optional: store user information in the context
-		// c.Set("userID", "123")
+		// Bearer scheme validation
+		parts := strings.Split(authHeader, " ")
+		if len(parts) != 2 || parts[0] != "Bearer" {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"error": "invalid authorization header format",
+			})
+			c.Abort()
+			return
+		}
+
+		tokenString := parts[1]
+
+		// Parse and validate the JWT token
+		token, err := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+			// Verify signing method
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+			}
+			return []byte(secretKey), nil
+		})
+
+		if err != nil {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"error": "invalid token",
+			})
+			c.Abort()
+			return
+		}
+
+		// Validate token and extract claims
+		claims, ok := token.Claims.(*CustomClaims)
+		if !ok || !token.Valid {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"error": "invalid token claims",
+			})
+			c.Abort()
+			return
+		}
+
+		// Store user information in the context
+		c.Set("userID", claims.UserID)
+		c.Set("username", claims.Username)
+		c.Set("email", claims.Email)
 
 		c.Next()
 	}
