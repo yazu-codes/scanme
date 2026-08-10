@@ -51,8 +51,6 @@ func main() {
 
 	jwtSecret := viper.GetString("jwt_secret")
 
-	fmt.Println("jwtsecret", jwtSecret)
-
 	// -----------------------
 	// Build DSN
 	// -----------------------
