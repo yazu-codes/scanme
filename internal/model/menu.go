@@ -26,10 +26,10 @@ type Menu struct {
 type MenuItem struct {
 	ID                   int64   `json:"id" gorm:"primaryKey"`
 	Name                 string  `json:"name" gorm:"not null"`
-	NameEn               string  `json:"name_en" gorm:"not null"`
+	NameEn               string  `json:"name_en" gorm:""`
 	Price                float64 `json:"price" gorm:"not null"`
 	Description          string  `json:"description" gorm:"not null"`
-	DescriptionEn        string  `json:"description_en" gorm:"not null"`
+	DescriptionEn        string  `json:"description_en" gorm:""`
 	PictureURL           string  `json:"picture_url" gorm:"not null"`
 	DisplayOrderPosition int     `json:"display_order_position" gorm:"not null"`
 	Category             string  `json:"category" gorm:"not null"`
