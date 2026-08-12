@@ -12,6 +12,7 @@ type PublicMenuOwner struct {
 	Phone              string `json:"menu_owner_phone"`
 	LogoURL            string `json:"menu_owner_logo_url"`
 	Slogan             string `json:"menu_owner_slogan"`
+	SloganEn           string `json:"menu_owner_slogan_en"`
 	PlaceBackgroundURL string `json:"menu_owner_place_background_url"`
 	UrlName            string `json:"menu_owner_url_name"`
 }
@@ -26,8 +27,10 @@ type PublicMenuConfiguration struct {
 
 type PublicMenuItem struct {
 	Name                 string  `json:"name"`
+	NameEn               string  `json:"name_en"`
 	Price                float64 `json:"price"`
 	Description          string  `json:"description"`
+	DescriptionEn        string  `json:"description_en"`
 	PictureURL           string  `json:"picture_url"`
 	Category             string  `json:"category"`
 	Allergens            string  `json:"allergens"`

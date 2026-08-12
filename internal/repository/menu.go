@@ -66,8 +66,10 @@ func (m *MenuRepository) GetMenuByUrlName(urlName string) (*dto.PublicMenu, erro
 	for _, it := range menu.MenuItems {
 		items = append(items, dto.PublicMenuItem{
 			Name:                 it.Name,
+			NameEn:               it.NameEn,
 			Price:                it.Price,
 			Description:          it.Description,
+			DescriptionEn:        it.DescriptionEn,
 			PictureURL:           it.PictureURL,
 			DisplayOrderPosition: it.DisplayOrderPosition,
 			Category:             it.Category,
@@ -81,6 +83,7 @@ func (m *MenuRepository) GetMenuByUrlName(urlName string) (*dto.PublicMenu, erro
 			Phone:              menu.MenuOwner.Phone,
 			LogoURL:            menu.MenuOwner.LogoURL,
 			Slogan:             menu.MenuOwner.Slogan,
+			SloganEn:           menu.MenuOwner.SloganEn,
 			PlaceBackgroundURL: menu.MenuOwner.PlaceBackgroundURL,
 		},
 		MenuConfiguration: dto.PublicMenuConfiguration{
