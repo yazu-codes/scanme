@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"log"
+	"log/slog"
+	"net/http"
 	"os"
 	"time"
 
@@ -19,6 +21,13 @@ import (
 )
 
 func main() {
+	logger := slog.New(
+		slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
+			Level: slog.LevelInfo,
+		}),
+	)
+	logger = logger.With(slog.String("component", "menu_service_backend"))
+
 	config := os.Getenv("CONFIG_YAML")
 	if config != "" {
 		fmt.Println("CONFIG_YAML environment variable is set. Writing to config.yaml.")
@@ -50,6 +59,8 @@ func main() {
 	timezone := viper.GetString("database.timezone")
 
 	jwtSecret := viper.GetString("jwt_secret")
+
+	translationServiceUrl := viper.GetString("translation_service.url")
 
 	// -----------------------
 	// Build DSN
@@ -93,9 +104,12 @@ func main() {
 		log.Fatal(err)
 	}
 
+	httpClient := http.Client{}
+
 	menuService := service.NewMenuService(db)
 	cardMenuCodeService := service.NewCardMenuCodeService(db)
-	publicHandler := handlers.NewPublicHandler(menuService, cardMenuCodeService)
+	translationService := service.NewTranslationService(translationServiceUrl, logger)
+	publicHandler := handlers.NewPublicHandler(translationService, &httpClient, menuService, cardMenuCodeService)
 
 	router.GET("/yumm", publicHandler.GetYummBrief)
 	router.GET("/:name", publicHandler.GetMenuByName)

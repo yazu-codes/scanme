@@ -11,12 +11,19 @@ import (
 )
 
 type PublicHandler struct {
-	service     *service.MenuService
-	codeService *service.CardMenuCodeService
+	httpClient         *http.Client
+	service            *service.MenuService
+	codeService        *service.CardMenuCodeService
+	translationService *service.TranslationService
 }
 
-func NewPublicHandler(service *service.MenuService, codeService *service.CardMenuCodeService) *PublicHandler {
-	return &PublicHandler{service: service, codeService: codeService}
+func NewPublicHandler(translationService *service.TranslationService, httpClient *http.Client, service *service.MenuService, codeService *service.CardMenuCodeService) *PublicHandler {
+	return &PublicHandler{
+		translationService: translationService,
+		httpClient:         httpClient,
+		service:            service,
+		codeService:        codeService,
+	}
 }
 
 func (h *PublicHandler) GetYummBrief(c *gin.Context) {
@@ -39,12 +46,26 @@ func (h *PublicHandler) GetMenus(c *gin.Context) {
 
 func (h *PublicHandler) GetMenuByName(c *gin.Context) {
 	name := c.Param("name")
+	language := c.Query("lang")
 
 	menu, err := h.service.GetMenuByUrlName(name)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
+	// TODO: do a http request to the translation service to translate the menu items if language is not empty and not "bg"
+	if language != "" && language != "bg" {
+		fmt.Println("Translating menu items to language:", language)
+
+		translatedMenu, err := h.translationService.TranslateMenu(*menu, language)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		menu = translatedMenu
+	}
+
 	c.JSON(http.StatusOK, gin.H{"menu": menu})
 }
 
