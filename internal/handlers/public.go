@@ -48,6 +48,8 @@ func (h *PublicHandler) GetMenuByName(c *gin.Context) {
 	name := c.Param("name")
 	language := c.Query("lang")
 
+	fmt.Println("LANGUAGE:", language)
+
 	menu, err := h.service.GetMenuByUrlName(name)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
