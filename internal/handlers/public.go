@@ -49,6 +49,8 @@ func (h *PublicHandler) GetMenuByName(c *gin.Context) {
 	language := c.Query("lang")
 
 	fmt.Println("LANGUAGE:", language)
+	fmt.Println("RAW QUERY STRING:", c.Request.URL.RawQuery)
+	fmt.Println("ALL QUERY PARAMS:", c.Request.URL.Query())
 
 	menu, err := h.service.GetMenuByUrlName(name)
 	if err != nil {
