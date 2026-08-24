@@ -356,10 +356,3 @@ func (h *PublicHandler) Home(c *gin.Context) {
 		"message": "Welcome!",
 	})
 }
-
-func (h *PublicHandler) Login(c *gin.Context) {
-	// Normally you'd validate credentials and generate a JWT.
-	c.JSON(http.StatusOK, gin.H{
-		"token": "my-secret-token",
-	})
-}

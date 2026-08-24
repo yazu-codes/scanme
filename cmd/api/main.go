@@ -121,18 +121,6 @@ func main() {
 	// Public routes
 	api.GET("/", publicHandler.Home)
 	// MOVING THIS ONE TO ADMIN api.GET("/menus", publicHandler.GetMenus)
-	api.GET("/codes", publicHandler.GetAllCodes)
-	api.POST("/login", publicHandler.Login)
-	api.POST("/create-menu", publicHandler.CreateMenu)
-	api.POST("/create-code", publicHandler.CreateCardMenuCode)
-	api.PUT("/update-code", publicHandler.UpdateCardMenuCode)
-	api.POST("/create-owner", publicHandler.AddMenuOwner)
-	api.PUT("/update-menu", middleware.WithTimeout(2*time.Minute), publicHandler.UpdateMenu)
-	api.POST("/suspend-menu/:id", publicHandler.SuspendMenuById)
-	api.POST("/yumm-enable/:id", publicHandler.EnableYummById)
-	api.POST("/yumm-disable/:id", publicHandler.DisableYummById)
-	api.POST("/enable-menu/:id", publicHandler.EnableMenuById)
-	api.DELETE("/delete-menu/:id", publicHandler.DeleteMenuById)
 
 	api.Use(middleware.AuthMiddleware(jwtSecret), middleware.RequireRole("admin", "user"))
 	{
@@ -145,6 +133,18 @@ func main() {
 		api.POST("/menu-associations", publicHandler.SetMenuAssociations)
 		api.GET("/profile", handlers.Profile)
 		api.GET("/settings", handlers.Settings)
+
+		api.GET("/codes", publicHandler.GetAllCodes)
+		api.POST("/create-menu", publicHandler.CreateMenu)
+		api.POST("/create-code", publicHandler.CreateCardMenuCode)
+		api.PUT("/update-code", publicHandler.UpdateCardMenuCode)
+		api.POST("/create-owner", publicHandler.AddMenuOwner)
+		api.PUT("/update-menu", middleware.WithTimeout(2*time.Minute), publicHandler.UpdateMenu)
+		api.POST("/suspend-menu/:id", publicHandler.SuspendMenuById)
+		api.POST("/yumm-enable/:id", publicHandler.EnableYummById)
+		api.POST("/yumm-disable/:id", publicHandler.DisableYummById)
+		api.POST("/enable-menu/:id", publicHandler.EnableMenuById)
+		api.DELETE("/delete-menu/:id", publicHandler.DeleteMenuById)
 	}
 
 	router.Run(":8080")
