@@ -21,6 +21,7 @@ type Menu struct {
 	MenuConfiguration MenuConfiguration `json:"menu_configuration" gorm:"constraint:OnDelete:CASCADE;foreignKey:menu_id"`
 	Suspended         bool              `json:"suspended"`
 	YummEligible      bool              `json:"yumm_eligible" gorm:"column:yumm_eligible"`
+	UserID            uint              `json:"-"`
 }
 
 type MenuItem struct {
@@ -47,7 +48,6 @@ type MenuOwner struct {
 	Slogan             string `json:"menu_owner_slogan" gorm:"column:menu_owner_slogan"`
 	SloganEn           string `json:"menu_owner_slogan_en" gorm:"column:menu_owner_slogan_en"`
 	MenuID             int64  `json:"menu_id" gorm:"column:menu_id"`
-	OwnerID            uint   `json:"menu_owner_id" gorm:"column:menu_owner_id"`
 }
 
 type MenuOwners []MenuOwner

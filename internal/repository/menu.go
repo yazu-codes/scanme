@@ -44,11 +44,31 @@ func (m *MenuRepository) GetMenuByName(name string) (*model.Menu, error) {
 	return &menu, nil
 }
 
-func (m *MenuRepository) GetMenuByOwnerId(id uint) ([]model.Menu, error) {
-	var menus []model.Menu
-	if err := m.DB.Preload("MenuItems").Preload("MenuOwner").Preload("MenuConfiguration").Where("menu_owner_id = ?", id).Find(&menus).Error; err != nil {
+func (m *MenuRepository) GetMenusByOwnerId(id uint) ([]model.Menu, error) {
+	var user model.User
+
+	if err := m.DB.
+		Where("id = ?", id).
+		First(&user).Error; err != nil {
 		return nil, err
 	}
+
+	if len(user.Menus) == 0 {
+		return []model.Menu{}, nil
+	}
+
+	var menus []model.Menu
+
+	if err := m.DB.
+		Preload("Users").
+		Preload("MenuItems").
+		Preload("MenuOwner").
+		Preload("MenuConfiguration").
+		Where("id IN ?", user.Menus).
+		Find(&menus).Error; err != nil {
+		return nil, err
+	}
+
 	return menus, nil
 }
 

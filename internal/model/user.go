@@ -5,4 +5,5 @@ type User struct {
 	Username string `json:"username" gorm:"uniqueIndex;not null"`
 	Password string `json:"password" gorm:"not null"`
 	Role     string `json:"role" gorm:"not null"` // e.g., "admin", "user"
+	Menus    []Menu `gorm:"foreignKey:UserID"`
 }
