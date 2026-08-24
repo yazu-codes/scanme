@@ -49,14 +49,14 @@ func (m *MenuRepository) GetMenuByName(name string) (*model.Menu, error) {
 func (m *MenuRepository) GetMenusByOwnerId(id uint) ([]model.Menu, error) {
 	var user model.User
 
-	menuIds, err := utils.StringToIntArray(user.AssociatedMenus)
-	if err != nil {
-		return nil, err
-	}
-
 	if err := m.DB.
 		Where("id = ?", id).
 		First(&user).Error; err != nil {
+		return nil, err
+	}
+
+	menuIds, err := utils.StringToIntArray(user.AssociatedMenus)
+	if err != nil {
 		return nil, err
 	}
 
