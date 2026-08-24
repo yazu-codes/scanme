@@ -48,7 +48,7 @@ func (m *MenuRepository) GetMenuByName(name string) (*model.Menu, error) {
 func (m *MenuRepository) GetMenusByOwnerId(id uint) ([]model.Menu, error) {
 	var user model.User
 
-	menuIds, err := utils.JsonStringToArray(user.AssociatedMenus)
+	menuIds, err := utils.StringToIntArray(user.AssociatedMenus)
 	if err != nil {
 		return nil, err
 	}
@@ -76,6 +76,22 @@ func (m *MenuRepository) GetMenusByOwnerId(id uint) ([]model.Menu, error) {
 	}
 
 	return menus, nil
+}
+
+func (m *MenuRepository) MenuAssociations(uid uint, menus string) (string, error) {
+	var user model.User
+
+	if err := m.DB.First(&user, uid).Error; err != nil {
+		return "", err
+	}
+
+	user.AssociatedMenus = menus
+
+	if err := m.DB.Save(&user).Error; err != nil {
+		return "", err
+	}
+
+	return user.AssociatedMenus, nil
 }
 
 func (m *MenuRepository) GetMenuByUrlName(urlName string) (*dto.PublicMenu, error) {

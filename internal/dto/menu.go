@@ -36,3 +36,8 @@ type PublicMenuItem struct {
 	Allergens            string  `json:"allergens"`
 	DisplayOrderPosition int     `json:"display_order_position"`
 }
+
+type SetMenuAssociationsRequest struct {
+	UserID           uint   `json:"userId"`
+	MenuAssociations []uint `json:"menuAssociations"`
+}

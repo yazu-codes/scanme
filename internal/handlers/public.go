@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/yazu-codes/scanme.git/internal/dto"
 	"github.com/yazu-codes/scanme.git/internal/model"
 	"github.com/yazu-codes/scanme.git/internal/service"
 )
@@ -35,13 +37,41 @@ func (h *PublicHandler) GetYummBrief(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"owners": places})
 }
 
-func (h *PublicHandler) MenuAssociations(c *gin.Context) {
-	menus, err := h.service.GetAllMenus()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+func (h *PublicHandler) SetMenuAssociations(c *gin.Context) {
+	var req dto.SetMenuAssociationsRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "invalid request body",
+		})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"menus": menus})
+
+	menuStrings := make([]string, 0, len(req.MenuAssociations))
+
+	for _, id := range req.MenuAssociations {
+		menuStrings = append(
+			menuStrings,
+			strconv.FormatUint(uint64(id), 10),
+		)
+	}
+
+	menuAssociations := strings.Join(menuStrings, ",")
+
+	if _, err := h.service.SetMenuAssociations(
+		req.UserID,
+		menuAssociations,
+	); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"userId":           req.UserID,
+		"menuAssociations": req.MenuAssociations,
+	})
 }
 
 func (h *PublicHandler) GetMenus(c *gin.Context) {
@@ -60,11 +90,14 @@ func (h *PublicHandler) GetMenus(c *gin.Context) {
 
 	userId := c.GetUint("userID")
 
+	fmt.Println("USERID: ", userId)
+
 	menus, err := h.service.GetAllMenusByUserId(userId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
 	c.JSON(http.StatusOK, gin.H{"menus": menus})
 }
 
