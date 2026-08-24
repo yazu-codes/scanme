@@ -38,7 +38,17 @@ func (h *PublicHandler) GetYummBrief(c *gin.Context) {
 }
 
 func (h *PublicHandler) MenuAssociations(c *gin.Context) {
-	menus, err := h.service.GetAllMenusByUserId(1)
+	userIDParam := c.Param("userId")
+
+	userID, err := strconv.ParseUint(userIDParam, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "invalid userId",
+		})
+		return
+	}
+
+	menus, err := h.service.GetAllMenusByUserId(uint(userID))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
