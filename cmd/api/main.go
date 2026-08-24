@@ -141,6 +141,7 @@ func main() {
 
 	api.Use(middleware.AuthMiddleware(jwtSecret), middleware.RequireRole("admin"))
 	{
+		api.GET("/menu-associations", publicHandler.MenuAssociations)
 		api.POST("/menu-associations", publicHandler.SetMenuAssociations)
 		api.GET("/profile", handlers.Profile)
 		api.GET("/settings", handlers.Settings)

@@ -37,6 +37,17 @@ func (h *PublicHandler) GetYummBrief(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"owners": places})
 }
 
+func (h *PublicHandler) MenuAssociations(c *gin.Context) {
+	menus, err := h.service.GetAllMenusByUserId(1)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"menus": menus})
+	return
+}
+
 func (h *PublicHandler) SetMenuAssociations(c *gin.Context) {
 	var req dto.SetMenuAssociationsRequest
 
