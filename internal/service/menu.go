@@ -66,7 +66,7 @@ func (s *MenuService) GetAllMenus() ([]model.Menu, error) {
 }
 
 func (s *MenuService) SetMenuAssociations(userId uint, menuAssociations string) (string, error) {
-	return s.MenuRepository.SaveMenuAssociations(userId, menuAssociations)
+	return s.MenuRepository.SetMenuAssociations(userId, menuAssociations)
 }
 
 func (s *MenuService) GetAllMenusByUserId(uid uint) ([]model.Menu, error) {
