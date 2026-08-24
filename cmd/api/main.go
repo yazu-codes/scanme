@@ -134,10 +134,14 @@ func main() {
 	api.POST("/enable-menu/:id", publicHandler.EnableMenuById)
 	api.DELETE("/delete-menu/:id", publicHandler.DeleteMenuById)
 
+	api.Use(middleware.AuthMiddleware(jwtSecret), middleware.RequireRole("admin", "user"))
+	{
+		api.GET("/menus", publicHandler.GetMenus)
+	}
+
 	api.Use(middleware.AuthMiddleware(jwtSecret), middleware.RequireRole("admin"))
 	{
 		api.POST("/menu-associations", publicHandler.MenuAssociations)
-		api.GET("/menus", publicHandler.GetMenus)
 		api.GET("/profile", handlers.Profile)
 		api.GET("/settings", handlers.Settings)
 	}

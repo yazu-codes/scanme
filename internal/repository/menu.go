@@ -44,6 +44,14 @@ func (m *MenuRepository) GetMenuByName(name string) (*model.Menu, error) {
 	return &menu, nil
 }
 
+func (m *MenuRepository) GetMenuByOwnerId(id uint) ([]model.Menu, error) {
+	var menus []model.Menu
+	if err := m.DB.Preload("MenuItems").Preload("MenuOwner").Preload("MenuConfiguration").Where("menu_owner_id = ?", id).Find(&menus).Error; err != nil {
+		return nil, err
+	}
+	return menus, nil
+}
+
 func (m *MenuRepository) GetMenuByUrlName(urlName string) (*dto.PublicMenu, error) {
 	var menu model.Menu
 

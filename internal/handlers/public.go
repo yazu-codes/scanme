@@ -45,7 +45,22 @@ func (h *PublicHandler) MenuAssociations(c *gin.Context) {
 }
 
 func (h *PublicHandler) GetMenus(c *gin.Context) {
-	menus, err := h.service.GetAllMenus()
+	role, _ := c.Get("role")
+
+	if role == "admin" {
+		menus, err := h.service.GetAllMenus()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{"menus": menus})
+
+		return
+	}
+
+	userId := c.GetUint("userID")
+
+	menus, err := h.service.GetAllMenusByUserId(userId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

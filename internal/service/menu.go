@@ -65,6 +65,10 @@ func (s *MenuService) GetAllMenus() ([]model.Menu, error) {
 	return s.MenuRepository.GetAllMenus()
 }
 
+func (s *MenuService) GetAllMenusByUserId(uid uint) ([]model.Menu, error) {
+	return s.MenuRepository.GetMenuByOwnerId(uid)
+}
+
 func (s *MenuService) GetMenuByName(name string) (*model.Menu, error) {
 	return s.MenuRepository.GetMenuByName(name)
 }
