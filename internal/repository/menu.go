@@ -67,7 +67,6 @@ func (m *MenuRepository) GetMenusByOwnerId(id uint) ([]model.Menu, error) {
 	var menus []model.Menu
 
 	if err := m.DB.
-		Preload("Users").
 		Preload("MenuItems").
 		Preload("MenuOwner").
 		Preload("MenuConfiguration").
