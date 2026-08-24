@@ -5,6 +5,7 @@ import (
 
 	"github.com/yazu-codes/scanme.git/internal/dto"
 	"github.com/yazu-codes/scanme.git/internal/model"
+	"github.com/yazu-codes/scanme.git/internal/utils"
 	"gorm.io/gorm"
 )
 
@@ -47,13 +48,18 @@ func (m *MenuRepository) GetMenuByName(name string) (*model.Menu, error) {
 func (m *MenuRepository) GetMenusByOwnerId(id uint) ([]model.Menu, error) {
 	var user model.User
 
+	menuIds, err := utils.JsonStringToArray(user.AssociatedMenus)
+	if err != nil {
+		return nil, err
+	}
+
 	if err := m.DB.
 		Where("id = ?", id).
 		First(&user).Error; err != nil {
 		return nil, err
 	}
 
-	if len(user.Menus) == 0 {
+	if len(menuIds) == 0 {
 		return []model.Menu{}, nil
 	}
 
@@ -64,7 +70,7 @@ func (m *MenuRepository) GetMenusByOwnerId(id uint) ([]model.Menu, error) {
 		Preload("MenuItems").
 		Preload("MenuOwner").
 		Preload("MenuConfiguration").
-		Where("id IN ?", user.Menus).
+		Where("id IN ?", menuIds).
 		Find(&menus).Error; err != nil {
 		return nil, err
 	}

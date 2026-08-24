@@ -1,9 +1,10 @@
 package model
 
 type User struct {
-	ID       int64  `json:"id" gorm:"primaryKey"`
-	Username string `json:"username" gorm:"uniqueIndex;not null"`
-	Password string `json:"password" gorm:"not null"`
-	Role     string `json:"role" gorm:"not null"` // e.g., "admin", "user"
-	Menus    []Menu `gorm:"foreignKey:UserID"`
+	ID              uint   `gorm:"primaryKey" json:"id"`
+	Email           string `gorm:"uniqueIndex" json:"email"`
+	Password        string `json:"-"` // Never expose password in JSON
+	Name            string `json:"name"`
+	Role            string `json:"role"`
+	AssociatedMenus string `json:"menus"`
 }
