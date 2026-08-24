@@ -2,6 +2,7 @@ package repository
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/yazu-codes/scanme.git/internal/dto"
 	"github.com/yazu-codes/scanme.git/internal/model"
@@ -283,4 +284,24 @@ func (m *MenuRepository) YummEnable(id uint) error {
 		return err
 	}
 	return nil
+}
+
+func (m *MenuRepository) SetMenuAssociations(uid uint, menus string) (string, error) {
+	result := m.DB.
+		Model(&model.User{}).
+		Where("id = ?", uid).
+		Update("associated_menus", menus)
+
+	if result.Error != nil {
+		return "", result.Error
+	}
+
+	if result.RowsAffected == 0 {
+		return "", fmt.Errorf(
+			"user with id %d not found",
+			uid,
+		)
+	}
+
+	return menus, nil
 }
