@@ -120,7 +120,7 @@ func main() {
 
 	// Public routes
 	api.GET("/", publicHandler.Home)
-	api.GET("/menus", publicHandler.GetMenus)
+	// MOVING THIS ONE TO ADMIN api.GET("/menus", publicHandler.GetMenus)
 	api.GET("/codes", publicHandler.GetAllCodes)
 	api.POST("/login", publicHandler.Login)
 	api.POST("/create-menu", publicHandler.CreateMenu)
@@ -136,6 +136,7 @@ func main() {
 
 	api.Use(middleware.AuthMiddleware(jwtSecret), middleware.RequireRole("admin"))
 	{
+		api.GET("/menus", publicHandler.GetMenus)
 		api.GET("/profile", handlers.Profile)
 		api.GET("/settings", handlers.Settings)
 	}
