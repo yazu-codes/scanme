@@ -159,7 +159,7 @@ func RequireMenuAccess() gin.HandlerFunc {
 			c.AbortWithStatusJSON(
 				http.StatusForbidden,
 				gin.H{
-					"error": "you are not authorized to update this menu",
+					"error": fmt.Sprint(associatedMenus, request.ID),
 				},
 			)
 			return
