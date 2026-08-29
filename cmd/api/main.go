@@ -122,9 +122,10 @@ func main() {
 	api.GET("/", publicHandler.Home)
 	// MOVING THIS ONE TO ADMIN api.GET("/menus", publicHandler.GetMenus)
 
-	api.Use(middleware.AuthMiddleware(jwtSecret), middleware.RequireRole("admin", "user"))
+	api.Use(middleware.AuthMiddleware(jwtSecret), middleware.RequireRole("admin", "user"), middleware.RequireMenuAccess())
 	{
 		api.GET("/menus", publicHandler.GetMenus)
+		api.PUT("/update-menu", middleware.WithTimeout(2*time.Minute), publicHandler.UpdateMenu)
 	}
 
 	api.Use(middleware.AuthMiddleware(jwtSecret), middleware.RequireRole("admin"))
@@ -139,7 +140,6 @@ func main() {
 		api.POST("/create-code", publicHandler.CreateCardMenuCode)
 		api.PUT("/update-code", publicHandler.UpdateCardMenuCode)
 		api.POST("/create-owner", publicHandler.AddMenuOwner)
-		api.PUT("/update-menu", middleware.WithTimeout(2*time.Minute), publicHandler.UpdateMenu)
 		api.POST("/suspend-menu/:id", publicHandler.SuspendMenuById)
 		api.POST("/yumm-enable/:id", publicHandler.EnableYummById)
 		api.POST("/yumm-disable/:id", publicHandler.DisableYummById)
