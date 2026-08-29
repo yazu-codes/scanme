@@ -122,10 +122,10 @@ func main() {
 	api.GET("/", publicHandler.Home)
 	// MOVING THIS ONE TO ADMIN api.GET("/menus", publicHandler.GetMenus)
 
-	api.Use(middleware.AuthMiddleware(jwtSecret), middleware.RequireRole("admin", "user"), middleware.RequireMenuAccess())
+	api.Use(middleware.AuthMiddleware(jwtSecret), middleware.RequireRole("admin", "user"))
 	{
 		api.GET("/menus", publicHandler.GetMenus)
-		api.PUT("/update-menu", middleware.WithTimeout(2*time.Minute), publicHandler.UpdateMenu)
+		api.PUT("/update-menu", middleware.WithTimeout(2*time.Minute), middleware.RequireMenuAccess(), publicHandler.UpdateMenu)
 	}
 
 	api.Use(middleware.AuthMiddleware(jwtSecret), middleware.RequireRole("admin"))
