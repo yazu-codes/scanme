@@ -11,9 +11,10 @@ import (
 
 // CustomClaims defines the JWT claims structure
 type CustomClaims struct {
-	UserID uint   `json:"user_id"`
-	Role   string `json:"role"`
-	Email  string `json:"email"`
+	UserID           uint   `json:"user_id"`
+	Role             string `json:"role"`
+	Email            string `json:"email"`
+	MenuAssociations string `json:"menus"`
 	jwt.RegisteredClaims
 }
 
@@ -74,6 +75,7 @@ func AuthMiddleware(secretKey string) gin.HandlerFunc {
 		c.Set("userID", claims.UserID)
 		c.Set("role", claims.Role)
 		c.Set("email", claims.Email)
+		c.Set("menus", claims.MenuAssociations)
 
 		c.Next()
 	}
