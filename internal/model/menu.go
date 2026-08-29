@@ -35,6 +35,7 @@ type MenuItem struct {
 	DisplayOrderPosition int     `json:"display_order_position" gorm:"not null"`
 	Category             string  `json:"category" gorm:"not null"`
 	Allergens            string  `json:"allergens"`
+	Enabled              bool    `json:"enabled"`
 	MenuID               int64   `json:"menu_id" gorm:"column:menu_id;not null"`
 }
 
