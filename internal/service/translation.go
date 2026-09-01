@@ -81,6 +81,8 @@ func (s *TranslationService) TranslateMenu(menu dto.PublicMenu, targetLanguage s
 		return nil, err
 	}
 
+	translatedMenu.MenuConfiguration = menu.MenuConfiguration // Preserve the original menu configuration
+
 	s.logger.Info("Menu translated successfully", "language", targetLanguage)
 	return &translatedMenu, nil
 }
