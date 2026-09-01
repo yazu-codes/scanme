@@ -142,6 +142,7 @@ func (m *MenuRepository) GetMenuByUrlName(urlName string) (*dto.PublicMenu, erro
 			FontColor:       menu.MenuConfiguration.FontColor,
 			FontFamily:      menu.MenuConfiguration.FontFamily,
 			FontSize:        menu.MenuConfiguration.FontSize,
+			Theme:           menu.MenuConfiguration.Theme,
 		},
 		MenuItems: items,
 	}
