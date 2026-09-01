@@ -23,6 +23,7 @@ type PublicMenuConfiguration struct {
 	FontColor       string `json:"font_color"`
 	FontFamily      string `json:"font_family"`
 	FontSize        int    `json:"font_size"`
+	Theme           string `json:"theme"`
 }
 
 type PublicMenuItem struct {

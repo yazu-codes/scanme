@@ -3,7 +3,6 @@ package middleware
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"strings"
@@ -148,7 +147,6 @@ func RequireMenuAccess() gin.HandlerFunc {
 		allowed := false
 
 		for _, menuID := range menuIDs {
-			// fmt.Println("comparing:", menuID, request.ID)
 			if uint(menuID) == request.ID {
 				allowed = true
 				break
@@ -159,7 +157,7 @@ func RequireMenuAccess() gin.HandlerFunc {
 			c.AbortWithStatusJSON(
 				http.StatusForbidden,
 				gin.H{
-					"error": fmt.Sprint(associatedMenus, request.ID),
+					"error": "you are not authorized to update this menu",
 				},
 			)
 			return
