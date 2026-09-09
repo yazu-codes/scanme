@@ -124,6 +124,7 @@ func (m *MenuRepository) GetMenuByUrlName(urlName string) (*dto.PublicMenu, erro
 			DisplayOrderPosition: it.DisplayOrderPosition,
 			Category:             it.Category,
 			Allergens:            it.Allergens,
+			Enabled:              it.Enabled,
 		})
 	}
 
