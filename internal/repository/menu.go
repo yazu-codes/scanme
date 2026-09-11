@@ -246,6 +246,13 @@ func (m *MenuRepository) UpdateMenu(menu *model.Menu) error {
 				tx.Rollback()
 				return err
 			}
+
+			if err := tx.Model(&model.MenuItem{}).
+				Where("id = ?", item.ID).
+				Update("enabled", item.Enabled).Error; err != nil {
+				tx.Rollback()
+				return err
+			}
 		}
 	}
 
