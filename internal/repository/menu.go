@@ -114,6 +114,9 @@ func (m *MenuRepository) GetMenuByUrlName(urlName string) (*dto.PublicMenu, erro
 
 	items := make([]dto.PublicMenuItem, 0, len(menu.MenuItems))
 	for _, it := range menu.MenuItems {
+		if it.Enabled == false {
+			continue
+		}
 		items = append(items, dto.PublicMenuItem{
 			Name:                 it.Name,
 			NameEn:               it.NameEn,
