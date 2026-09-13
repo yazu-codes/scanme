@@ -24,7 +24,7 @@ func (m *MenuRepository) AllEligibleForYumm() (model.Menus, error) {
 
 func (m *MenuRepository) GetAllMenus() ([]model.Menu, error) {
 	var menus []model.Menu
-	if err := m.DB.Preload("ReviewLink").Preload("MenuItems").Preload("MenuOwner").Preload("MenuConfiguration").Find(&menus).Error; err != nil {
+	if err := m.DB.Preload("MenuOwner.ReviewLinks").Preload("MenuItems").Preload("MenuOwner").Preload("MenuConfiguration").Find(&menus).Error; err != nil {
 		return nil, err
 	}
 	return menus, nil
@@ -32,7 +32,7 @@ func (m *MenuRepository) GetAllMenus() ([]model.Menu, error) {
 
 func (m *MenuRepository) GetMenuByID(id uint) (*model.Menu, error) {
 	var menu model.Menu
-	if err := m.DB.Preload("ReviewLink").Preload("MenuItems").Preload("MenuOwner").Preload("MenuConfiguration").First(&menu, id).Error; err != nil {
+	if err := m.DB.Preload("MenuOwner.ReviewLinks").Preload("MenuItems").Preload("MenuOwner").Preload("MenuConfiguration").First(&menu, id).Error; err != nil {
 		return nil, err
 	}
 	return &menu, nil
@@ -103,7 +103,7 @@ func (m *MenuRepository) GetMenuByUrlName(urlName string) (*dto.PublicMenu, erro
 		Preload("MenuOwner").
 		Preload("MenuConfiguration").
 		Preload("MenuItems").
-		Preload("ReviewLink").
+		Preload("MenuOwner.ReviewLinks").
 		First(&menu).Error
 
 	if err != nil {
