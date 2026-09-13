@@ -24,7 +24,7 @@ func (m *MenuRepository) AllEligibleForYumm() (model.Menus, error) {
 
 func (m *MenuRepository) GetAllMenus() ([]model.Menu, error) {
 	var menus []model.Menu
-	if err := m.DB.Preload("MenuItems").Preload("MenuOwner").Preload("MenuConfiguration").Find(&menus).Error; err != nil {
+	if err := m.DB.Preload("ReviewLinks").Preload("MenuItems").Preload("MenuOwner").Preload("MenuConfiguration").Find(&menus).Error; err != nil {
 		return nil, err
 	}
 	return menus, nil
@@ -32,7 +32,7 @@ func (m *MenuRepository) GetAllMenus() ([]model.Menu, error) {
 
 func (m *MenuRepository) GetMenuByID(id uint) (*model.Menu, error) {
 	var menu model.Menu
-	if err := m.DB.Preload("MenuItems").Preload("MenuOwner").Preload("MenuConfiguration").First(&menu, id).Error; err != nil {
+	if err := m.DB.Preload("ReviewLinks").Preload("MenuItems").Preload("MenuOwner").Preload("MenuConfiguration").First(&menu, id).Error; err != nil {
 		return nil, err
 	}
 	return &menu, nil
@@ -103,6 +103,7 @@ func (m *MenuRepository) GetMenuByUrlName(urlName string) (*dto.PublicMenu, erro
 		Preload("MenuOwner").
 		Preload("MenuConfiguration").
 		Preload("MenuItems").
+		Preload("ReviewLinks").
 		First(&menu).Error
 
 	if err != nil {
@@ -131,6 +132,18 @@ func (m *MenuRepository) GetMenuByUrlName(urlName string) (*dto.PublicMenu, erro
 		})
 	}
 
+	links := make([]dto.PublicReviewLink, 0, len(menu.MenuOwner.ReviewLinks))
+	for _, link := range menu.MenuOwner.ReviewLinks {
+		if link.MenuID != menu.ID {
+			continue
+		}
+		links = append(links, dto.PublicReviewLink{
+			URL:      link.URL,
+			Title:    link.Title,
+			ImageURL: link.ImageURL,
+		})
+	}
+
 	public := &dto.PublicMenu{
 		MenuOwner: dto.PublicMenuOwner{
 			Name:               menu.MenuOwner.Name,
@@ -139,6 +152,7 @@ func (m *MenuRepository) GetMenuByUrlName(urlName string) (*dto.PublicMenu, erro
 			Slogan:             menu.MenuOwner.Slogan,
 			SloganEn:           menu.MenuOwner.SloganEn,
 			PlaceBackgroundURL: menu.MenuOwner.PlaceBackgroundURL,
+			ReviewLinks:        links,
 		},
 		MenuConfiguration: dto.PublicMenuConfiguration{
 			CategoryOrder:   menu.MenuConfiguration.CategoryOrder,
@@ -253,6 +267,31 @@ func (m *MenuRepository) UpdateMenu(menu *model.Menu) error {
 			if err := tx.Model(&model.MenuItem{}).
 				Where("id = ?", item.ID).
 				Update("enabled", item.Enabled).Error; err != nil {
+				tx.Rollback()
+				return err
+			}
+		}
+	}
+
+	for _, link := range menu.MenuOwner.ReviewLinks {
+		link.MenuID = menu.ID
+		if link.ID == 0 {
+			if err := tx.Create(&link).Error; err != nil {
+				tx.Rollback()
+				return err
+			}
+		} else {
+			if err := tx.Model(&model.ReviewLink{}).
+				Where("id = ?", link.ID).
+				Omit("id").
+				Omit("menu_id").
+				Updates(&link).Error; err != nil {
+				tx.Rollback()
+				return err
+			}
+			if err := tx.Model(&model.ReviewLink{}).
+				Where("id = ?", link.ID).
+				Update("menu_id", link.MenuID).Error; err != nil {
 				tx.Rollback()
 				return err
 			}

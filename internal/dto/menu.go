@@ -8,13 +8,14 @@ type PublicMenu struct {
 }
 
 type PublicMenuOwner struct {
-	Name               string `json:"menu_owner_name"`
-	Phone              string `json:"menu_owner_phone"`
-	LogoURL            string `json:"menu_owner_logo_url"`
-	Slogan             string `json:"menu_owner_slogan"`
-	SloganEn           string `json:"menu_owner_slogan_en"`
-	PlaceBackgroundURL string `json:"menu_owner_place_background_url"`
-	UrlName            string `json:"menu_owner_url_name"`
+	Name               string             `json:"menu_owner_name"`
+	Phone              string             `json:"menu_owner_phone"`
+	LogoURL            string             `json:"menu_owner_logo_url"`
+	Slogan             string             `json:"menu_owner_slogan"`
+	SloganEn           string             `json:"menu_owner_slogan_en"`
+	PlaceBackgroundURL string             `json:"menu_owner_place_background_url"`
+	UrlName            string             `json:"menu_owner_url_name"`
+	ReviewLinks        []PublicReviewLink `json:"menu_owner_review_links"`
 }
 
 type PublicMenuConfiguration struct {
@@ -37,6 +38,12 @@ type PublicMenuItem struct {
 	Allergens            string  `json:"allergens"`
 	DisplayOrderPosition int     `json:"display_order_position"`
 	Enabled              bool    `json:"enabled"`
+}
+
+type PublicReviewLink struct {
+	URL      string `json:"url"`
+	Title    string `json:"title"`
+	ImageURL string `json:"image_url"`
 }
 
 type SetMenuAssociationsRequest struct {

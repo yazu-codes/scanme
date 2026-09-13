@@ -122,6 +122,16 @@ func (h *PublicHandler) GetMenus(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"menus": menus})
 }
 
+func (h *PublicHandler) GetMenuReviews(c *gin.Context) {
+	name := c.Param("name")
+	menuReviewLinks, err := h.service.GetMenuReviewsByName(name)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"reviewLinks": menuReviewLinks})
+}
+
 func (h *PublicHandler) GetMenuByName(c *gin.Context) {
 	name := c.Param("name")
 	language := c.Query("lang")

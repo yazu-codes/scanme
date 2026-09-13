@@ -40,15 +40,50 @@ type MenuItem struct {
 }
 
 type MenuOwner struct {
-	ID                 int64  `json:"id" gorm:"primaryKey"`
-	Name               string `json:"menu_owner_name" gorm:"column:menu_owner_name;uniqueIndex;not null"`
-	UrlName            string `json:"menu_owner_url_name" gorm:"column:menu_owner_url_name;uniqueIndex;not null"`
-	Phone              string `json:"menu_owner_phone" gorm:"column:menu_owner_phone"`
-	LogoURL            string `json:"menu_owner_logo_url" gorm:"column:menu_owner_logo_url;not null"`
-	PlaceBackgroundURL string `json:"menu_owner_place_background_url" gorm:"column:menu_owner_place_background_url"`
-	Slogan             string `json:"menu_owner_slogan" gorm:"column:menu_owner_slogan"`
-	SloganEn           string `json:"menu_owner_slogan_en" gorm:"column:menu_owner_slogan_en"`
-	MenuID             int64  `json:"menu_id" gorm:"column:menu_id"`
+	ID                 int64        `json:"id" gorm:"primaryKey"`
+	Name               string       `json:"menu_owner_name" gorm:"column:menu_owner_name;uniqueIndex;not null"`
+	UrlName            string       `json:"menu_owner_url_name" gorm:"column:menu_owner_url_name;uniqueIndex;not null"`
+	Phone              string       `json:"menu_owner_phone" gorm:"column:menu_owner_phone"`
+	LogoURL            string       `json:"menu_owner_logo_url" gorm:"column:menu_owner_logo_url;not null"`
+	PlaceBackgroundURL string       `json:"menu_owner_place_background_url" gorm:"column:menu_owner_place_background_url"`
+	Slogan             string       `json:"menu_owner_slogan" gorm:"column:menu_owner_slogan"`
+	SloganEn           string       `json:"menu_owner_slogan_en" gorm:"column:menu_owner_slogan_en"`
+	MenuID             int64        `json:"menu_id" gorm:"column:menu_id"`
+	ReviewLinks        []ReviewLink `json:"review_links" gorm:"constraint:OnDelete:CASCADE;foreignKey:menu_id"`
+}
+
+func (mo *MenuOwner) ReviewLinksToDTO() []dto.PublicReviewLink {
+	publicLinks := make([]dto.PublicReviewLink, 0, len(mo.ReviewLinks))
+	for _, rl := range mo.ReviewLinks {
+		publicLinks = append(publicLinks, dto.PublicReviewLink{
+			URL:      rl.URL,
+			Title:    rl.Title,
+			ImageURL: rl.ImageURL,
+		})
+	}
+	return publicLinks
+}
+
+type ReviewLink struct {
+	ID       int64  `json:"id" gorm:"primaryKey"`
+	MenuID   int64  `json:"menu_id" gorm:"column:menu_id"`
+	URL      string `json:"url" gorm:"not null"`
+	Title    string `json:"title" gorm:"not null"`
+	ImageURL string `json:"image_url" gorm:"not null"`
+}
+
+type ReviewLinks []ReviewLink
+
+func (rls *ReviewLinks) ToPublicReviewLinks() []dto.PublicReviewLink {
+	publicLinks := make([]dto.PublicReviewLink, 0, len(*rls))
+	for _, rl := range *rls {
+		publicLinks = append(publicLinks, dto.PublicReviewLink{
+			URL:      rl.URL,
+			Title:    rl.Title,
+			ImageURL: rl.ImageURL,
+		})
+	}
+	return publicLinks
 }
 
 type MenuOwners []MenuOwner

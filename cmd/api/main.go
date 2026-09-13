@@ -113,6 +113,7 @@ func main() {
 
 	router.GET("/yumm", publicHandler.GetYummBrief)
 	router.GET("/:name", publicHandler.GetMenuByName)
+	router.GET("/:name/reviews", publicHandler.GetMenuReviews)
 	router.GET("/c/:code", publicHandler.GetMenuNameByCode)
 
 	// Protected routes
