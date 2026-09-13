@@ -81,13 +81,13 @@ func (s *MenuService) GetMenuByUrlName(urlName string) (*dto.PublicMenu, error) 
 	return s.MenuRepository.GetMenuByUrlName(urlName)
 }
 
-func (s *MenuService) GetMenuReviewsByName(name string) ([]dto.PublicReviewLink, error) {
-	menu, err := s.MenuRepository.GetMenuByName(name)
+func (s *MenuService) GetMenuReviewsByName(urlName string) ([]dto.PublicReviewLink, error) {
+	menu, err := s.MenuRepository.GetMenuByUrlName(urlName)
 	if err != nil {
 		return nil, err
 	}
 
-	return menu.MenuOwner.ReviewLinksToDTO(), nil
+	return menu.MenuOwner.ReviewLinks, nil
 }
 
 func (s *MenuService) CreateMenu(menu *model.Menu) error {
