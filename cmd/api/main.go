@@ -113,8 +113,8 @@ func main() {
 	publicHandler := handlers.NewPublicHandler(translationService, &httpClient, menuService, cardMenuCodeService)
 
 	router.GET("/yumm", publicHandler.GetYummBrief)
+	router.GET("/reviews/:name", publicHandler.GetMenuReviews)
 	router.GET("/:name", publicHandler.GetMenuByName)
-	router.GET("/:name/reviews", publicHandler.GetMenuReviews)
 	router.GET("/c/:code", publicHandler.GetMenuNameByCode)
 
 	// Protected routes
