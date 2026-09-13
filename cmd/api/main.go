@@ -100,6 +100,7 @@ func main() {
 		&model.MenuItem{},
 		&model.MenuOwner{},
 		&model.CardMenuCode{},
+		&model.ReviewLink{},
 	); err != nil {
 		log.Fatal(err)
 	}
