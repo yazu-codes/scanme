@@ -8,6 +8,7 @@ import (
 	"github.com/yazu-codes/scanme.git/internal/model"
 	"github.com/yazu-codes/scanme.git/internal/utils"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type MenuRepository struct {
@@ -213,6 +214,7 @@ func (m *MenuRepository) UpdateMenu(menu *model.Menu) error {
 		Where("menu_id = ?", menu.ID).
 		Omit("id").
 		Omit("menu_id").
+		Omit(clause.Associations).
 		Updates(&menu.MenuOwner).Error; err != nil {
 		tx.Rollback()
 		return err
@@ -272,6 +274,24 @@ func (m *MenuRepository) UpdateMenu(menu *model.Menu) error {
 				return err
 			}
 		}
+	}
+
+	// Same reconciliation as menu items: a link the dashboard removed simply
+	// isn't in the payload, so without this it would survive the update.
+	var keepLinkIDs []int64
+	for _, link := range menu.MenuOwner.ReviewLinks {
+		if link.ID != 0 {
+			keepLinkIDs = append(keepLinkIDs, link.ID)
+		}
+	}
+
+	deleteLinkQuery := tx.Where("menu_id = ?", menu.ID)
+	if len(keepLinkIDs) > 0 {
+		deleteLinkQuery = deleteLinkQuery.Where("id NOT IN ?", keepLinkIDs)
+	}
+	if err := deleteLinkQuery.Delete(&model.ReviewLink{}).Error; err != nil {
+		tx.Rollback()
+		return err
 	}
 
 	for _, link := range menu.MenuOwner.ReviewLinks {
