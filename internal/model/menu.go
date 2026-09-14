@@ -118,7 +118,8 @@ type MenuConfiguration struct {
 }
 
 type CardMenuCode struct {
-	ID     int64  `json:"id" gorm:"primaryKey"`
-	MenuID int64  `json:"menu_id" gorm:"column:menu_id"`
-	Code   string `json:"code" gorm:"uniqueIndex;not null"`
+	ID        int64  `json:"id" gorm:"primaryKey"`
+	MenuID    int64  `json:"menu_id" gorm:"column:menu_id"`
+	Code      string `json:"code" gorm:"uniqueIndex;not null"`
+	CustomURL string `json:"custom_url" gorm:"column:custom_url"`
 }
