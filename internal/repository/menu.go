@@ -154,6 +154,8 @@ func (m *MenuRepository) GetMenuByUrlName(urlName string) (*dto.PublicMenu, erro
 			Slogan:             menu.MenuOwner.Slogan,
 			SloganEn:           menu.MenuOwner.SloganEn,
 			PlaceBackgroundURL: menu.MenuOwner.PlaceBackgroundURL,
+			WIFI:               menu.MenuOwner.WIFI,
+			WorkingSchedule:    menu.MenuOwner.WorkingSchedule,
 			ReviewLinks:        links,
 		},
 		MenuConfiguration: dto.PublicMenuConfiguration{
