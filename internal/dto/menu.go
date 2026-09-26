@@ -13,6 +13,8 @@ type PublicMenuOwner struct {
 	LogoURL            string             `json:"menu_owner_logo_url"`
 	Slogan             string             `json:"menu_owner_slogan"`
 	SloganEn           string             `json:"menu_owner_slogan_en"`
+	WIFI               string             `json:"menu_owner_wifi"`
+	WorkingSchedule    string             `json:"menu_owner_working_schedule"`
 	PlaceBackgroundURL string             `json:"menu_owner_place_background_url"`
 	UrlName            string             `json:"menu_owner_url_name"`
 	ReviewLinks        []PublicReviewLink `json:"menu_owner_review_links"`

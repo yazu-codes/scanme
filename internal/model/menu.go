@@ -1,6 +1,9 @@
 package model
 
-import "github.com/yazu-codes/scanme.git/internal/dto"
+import (
+	"github.com/google/uuid"
+	"github.com/yazu-codes/scanme.git/internal/dto"
+)
 
 type Menus []Menu
 
@@ -16,6 +19,7 @@ func (m *Menus) ExtractPlaceInformation() []dto.PublicMenuOwner {
 
 type Menu struct {
 	ID                int64             `json:"id" gorm:"primaryKey"`
+	UUID              uuid.UUID         `gorm:"type:uuid;not null;uniqueIndex;default:gen_random_uuid()"`
 	MenuItems         []MenuItem        `json:"menu_items" gorm:"constraint:OnDelete:CASCADE;foreignKey:menu_id"`
 	MenuOwner         MenuOwner         `json:"menu_owner" gorm:"constraint:OnDelete:CASCADE;foreignKey:menu_id"`
 	MenuConfiguration MenuConfiguration `json:"menu_configuration" gorm:"constraint:OnDelete:CASCADE;foreignKey:menu_id"`
@@ -49,6 +53,8 @@ type MenuOwner struct {
 	Slogan             string       `json:"menu_owner_slogan" gorm:"column:menu_owner_slogan"`
 	SloganEn           string       `json:"menu_owner_slogan_en" gorm:"column:menu_owner_slogan_en"`
 	MenuID             int64        `json:"menu_id" gorm:"column:menu_id"`
+	WIFI               string       `json:"menu_owner_wifi" gorm:"column:menu_owner_wifi"`
+	WorkingSchedule    string       `json:"menu_owner_working_schedule" gorm:"column:menu_owner_working_schedule"`
 	ReviewLinks        []ReviewLink `json:"review_links" gorm:"constraint:OnDelete:CASCADE;foreignKey:menu_id"`
 }
 
@@ -100,6 +106,8 @@ func (m *MenuOwners) ToDTO() []dto.PublicMenuOwner {
 			SloganEn:           owner.SloganEn,
 			PlaceBackgroundURL: owner.PlaceBackgroundURL,
 			UrlName:            owner.UrlName,
+			WIFI:               owner.WIFI,
+			WorkingSchedule:    owner.WorkingSchedule,
 		})
 	}
 
