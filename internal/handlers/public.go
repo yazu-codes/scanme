@@ -163,7 +163,9 @@ func (h *PublicHandler) GetMenuByName(c *gin.Context) {
 
 		for i := range translatedMenu.MenuItems {
 			translatedMenu.MenuItems[i].Name = fmt.Sprintf("%s / %s", originalMenuItems[i].Name, translatedMenu.MenuItems[i].Name)
-			translatedMenu.MenuItems[i].Description = fmt.Sprintf("%s / %s", originalMenuItems[i].Description, translatedMenu.MenuItems[i].Description)
+			if translatedMenu.MenuItems[i].Description != "" {
+				translatedMenu.MenuItems[i].Description = fmt.Sprintf("%s / %s", originalMenuItems[i].Description, translatedMenu.MenuItems[i].Description)
+			}
 		}
 
 		menu = translatedMenu
