@@ -150,6 +150,7 @@ func (h *PublicHandler) GetMenuByName(c *gin.Context) {
 	if language != "" && language != "bg" {
 		fmt.Println("Translating menu items to language:", language)
 
+		originalMenuName := menu.MenuOwner.Name
 		originalMenuItems := menu.MenuItems
 
 		translatedMenu, err := h.translationService.TranslateMenu(*menu, language)
@@ -157,6 +158,8 @@ func (h *PublicHandler) GetMenuByName(c *gin.Context) {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
+
+		translatedMenu.MenuOwner.Name = originalMenuName
 
 		for i := range translatedMenu.MenuItems {
 			translatedMenu.MenuItems[i].Name = fmt.Sprintf("%s / %s", originalMenuItems[i].Name, translatedMenu.MenuItems[i].Name)
